@@ -1,0 +1,7 @@
+services:
+  service:
+    build:
+      context: .
+    container_name: ecsdemo
+    ports:
+      - "8080:8080"

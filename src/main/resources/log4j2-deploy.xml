@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Appenders>
+    <Console name="CONSOLE">
+      <JsonTemplateLayout eventTemplateUri="classpath:LogstashJsonEventLayoutV1.json"
+        locationInfoEnabled="true"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Logger name="com.slackbuds.ecsdemo" level="DEBUG" additivity="false">
+      <AppenderRef ref="CONSOLE"/>
+    </Logger>
+    <Root level="INFO">
+      <AppenderRef ref="CONSOLE"/>
+    </Root>
+  </Loggers>
+</Configuration>

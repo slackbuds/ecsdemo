@@ -1,0 +1,5 @@
+spring.application.name: ecsdemo
+server.port: 8080
+
+spring.main.banner-mode: OFF
+logging.config: classpath:log4j2-deploy.xml
