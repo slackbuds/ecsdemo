@@ -1,5 +1,5 @@
 services:
-  service:
+  app:
     build:
       context: .
     container_name: ecsdemo
