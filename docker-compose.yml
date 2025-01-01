@@ -3,5 +3,8 @@ services:
     build:
       context: .
     container_name: ecsdemo
+    platform: linux/amd64
+    environment:
+      JAVA_OPTS: -Dspring.profiles.active=deploy
     ports:
       - "8080:8080"
