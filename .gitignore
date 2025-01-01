@@ -37,3 +37,5 @@ build/
 .terraform.tfstate.lock.info
 terraform.tfstate
 terraform.tfstate.backup
+
+t.*
