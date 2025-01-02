@@ -1,32 +1,38 @@
+### GET actuator
+GET {{host}}/actuator
+
+### GET health
+GET {{host}}/actuator/health
+
 ### GET hello world
-GET http://localhost:8080/ecsdemo/hello
+GET {{host}}/ecsdemo/hello
 
 ### GET hello bad
-GET http://localhost:8080/ecsdemo/hello?name=bad
+GET {{host}}/ecsdemo/hello?name=bad
 
 ### GET env as plain
-GET http://localhost:8080/ecsdemo/env
+GET {{host}}/ecsdemo/env
 
 ### GET env HOME as plain
-GET http://localhost:8080/ecsdemo/env?key=HOME
+GET {{host}}/ecsdemo/env?key=HOME
 
 ### GET env as json
-GET http://localhost:8080/ecsdemo/env
+GET {{host}}/ecsdemo/env
 Accept: application/json
 
 ### GET env HOME as json
-GET http://localhost:8080/ecsdemo/env?key=HOME
+GET {{host}}/ecsdemo/env?key=HOME
 Accept: application/json
 
 ### POST echo json
-POST http://localhost:8080/ecsdemo/echo
+POST {{host}}/ecsdemo/echo
 Content-Type: application/json
 foo: Bar
 
 {"id":42,"foo":"bar"}
 
 ### POST echo csv
-POST http://localhost:8080/ecsdemo/echo
+POST {{host}}/ecsdemo/echo
 Accept: application/json
 Content-Type: application/csv
 fein: fein
