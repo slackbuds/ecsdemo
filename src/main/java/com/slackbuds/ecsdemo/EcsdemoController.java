@@ -1,5 +1,6 @@
 package com.slackbuds.ecsdemo;
 
+import java.util.List;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -76,6 +77,14 @@ public class EcsdemoController {
         .headers(headers)
         .body(body)
         .build(),
+        HttpStatus.OK);
+  }
+
+  @GetMapping("/aws")
+  ResponseEntity<List<String>> listTables() {
+    log.debug("list dynamodb tables");
+
+    return new ResponseEntity<>(List.of("table1", "table2"),
         HttpStatus.OK);
   }
 }
