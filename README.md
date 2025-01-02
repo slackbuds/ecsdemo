@@ -27,7 +27,7 @@ terraform destroy -var-file variables.tfvars -auto-approve
 ##### docker build
 
 ```shell
-#docker build -t ecsdemo-app .
+#docker build --platform linux/amd64 -t ecsdemo-app .
 docker compose build
 ```
 
@@ -36,13 +36,12 @@ docker compose build
 ```shell
 docker tag ecsdemo-app:latest 000000000000.dkr.ecr.us-west-2.localhost.localstack.cloud:4566/ecsdemo-dev:latest
 docker push 000000000000.dkr.ecr.us-west-2.localhost.localstack.cloud:4566/ecsdemo-dev:latest
-#docker pull 000000000000.dkr.ecr.us-west-2.localhost.localstack.cloud:4566/ecsdemo-dev:latest
 ```
 
 ##### docker to aws
 
 ```shell
+aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 714681258665.dkr.ecr.us-west-2.amazonaws.com
 docker tag ecsdemo-app:latest 714681258665.dkr.ecr.us-west-2.amazonaws.com/ecsdemo-dev:latest
 docker push 714681258665.dkr.ecr.us-west-2.amazonaws.com/ecsdemo-dev:latest
-#docker pull 714681258665.dkr.ecr.us-west-2.amazonaws.com/ecsdemo-dev:latest
 ```
