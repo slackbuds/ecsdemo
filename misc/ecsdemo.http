@@ -38,3 +38,7 @@ Content-Type: application/csv
 fein: fein
 
 fein,fein,fein,fein
+
+### GET dynamodb tables
+GET {{host}}/ecsdemo/aws/tables
+Accept: application/json

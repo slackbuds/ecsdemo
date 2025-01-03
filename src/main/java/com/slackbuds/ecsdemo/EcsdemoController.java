@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 @Log4j2
 @RestController
@@ -19,9 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class EcsdemoController {
 
   private final StartupEnv startupEnv;
+  private final DynamoDbClient dynamoDbClient;
 
-  EcsdemoController(StartupEnv startupEnv) {
+  EcsdemoController(StartupEnv startupEnv,
+      DynamoDbClient dynamoDbClient) {
     this.startupEnv = startupEnv;
+    this.dynamoDbClient = dynamoDbClient;
   }
 
   @GetMapping("hello")
@@ -80,11 +84,11 @@ public class EcsdemoController {
         HttpStatus.OK);
   }
 
-  @GetMapping("/aws")
+  @GetMapping("/aws/tables")
   ResponseEntity<List<String>> listTables() {
     log.debug("list dynamodb tables");
 
-    return new ResponseEntity<>(List.of("table1", "table2"),
+    return new ResponseEntity<>(dynamoDbClient.listTables().tableNames(),
         HttpStatus.OK);
   }
 }
