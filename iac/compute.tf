@@ -72,45 +72,18 @@ resource "aws_ecs_task_definition" "ecsdemo" {
   ])
 }
 
-resource "aws_lb_target_group" "ecsdemo" {
-  name        = local.resource_full_name
-  port        = 80
-  protocol    = "HTTP"
-  target_type = "ip"
-  vpc_id      = "vpc-40af0026"
-  health_check {
-    path     = "/actuator/health"
-    port     = "8080"
-    protocol = "HTTP"
-  }
-}
-
-# resource "aws_ecs_service" "ecsdemo" {
-#   name            = local.resource_full_name
-#   cluster         = aws_ecs_cluster.ecsdemo.id
-#   task_definition = aws_ecs_task_definition.ecsdemo.arn
-#   desired_count   = 1
-#   network_configuration {
-#     subnets         = ["subnet-1b3da840", "subnet-ae5447e7", "subnet-92ba43f4", "subnet-8b3dcea0"]
-#     security_groups = [aws_security_group.ecsdemo_ecs.id]
-#   }
-#   load_balancer {
-#     container_name   = "ecsdemo-container"
-#     container_port   = 8080
-#     target_group_arn = aws_lb_target_group.ecsdemo.arn
-#   }
-# }
-
 resource "aws_s3_bucket" "access_logs" {
   bucket = local.bucket_name_access_logs
 }
 
 resource "aws_security_group" "ecsdemo_ecs" {
-  name = local.ecs_security_group
+  name   = local.ecs_security_group
+  vpc_id = "vpc-0459ebf35d23402f5"
 }
 
 resource "aws_security_group" "ecsdemo_elb" {
-  name = local.elb_security_group
+  name   = local.elb_security_group
+  vpc_id = "vpc-0459ebf35d23402f5"
 }
 
 resource "aws_vpc_security_group_ingress_rule" "ecsdemo-to-elb" {
@@ -137,13 +110,54 @@ resource "aws_vpc_security_group_egress_rule" "ecsdemo-ecs-egress" {
   ip_protocol       = -1
 }
 
+resource "aws_lb_target_group" "ecsdemo" {
+  name        = local.resource_full_name
+  port        = 80
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = "vpc-0459ebf35d23402f5"
+  health_check {
+    path     = "/actuator/health"
+    port     = "8080"
+    protocol = "HTTP"
+  }
+}
+
 resource "aws_lb" "ecsdemo" {
   name               = local.resource_full_name
   load_balancer_type = "application"
   security_groups    = [aws_security_group.ecsdemo_elb.id]
-  subnets            = ["subnet-1b3da840", "subnet-ae5447e7", "subnet-92ba43f4", "subnet-8b3dcea0"]
+  subnets            = ["subnet-0ca86d728a0a1fa7b", "subnet-029b16c69a7bdada1", "subnet-0e8bef5b4cbe0acca", "subnet-06a67c73f3f4260d5"]
   access_logs {
     bucket = aws_s3_bucket.access_logs.id
   }
   tags = local.tags
+}
+
+resource "aws_lb_listener" "ecsdemo" {
+  load_balancer_arn = aws_lb.ecsdemo.arn
+  port              = "80"
+  protocol          = "HTTP"
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.ecsdemo.arn
+  }
+}
+
+resource "aws_ecs_service" "ecsdemo" {
+  name            = local.resource_full_name
+  cluster         = aws_ecs_cluster.ecsdemo.id
+  task_definition = aws_ecs_task_definition.ecsdemo.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+  network_configuration {
+    subnets          = ["subnet-0ca86d728a0a1fa7b", "subnet-029b16c69a7bdada1", "subnet-0e8bef5b4cbe0acca", "subnet-06a67c73f3f4260d5"]
+    security_groups  = [aws_security_group.ecsdemo_ecs.id]
+    assign_public_ip = true
+  }
+  load_balancer {
+    container_name   = "ecsdemo-container"
+    container_port   = 8080
+    target_group_arn = aws_lb_target_group.ecsdemo.arn
+  }
 }
