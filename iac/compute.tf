@@ -78,12 +78,12 @@ resource "aws_s3_bucket" "access_logs" {
 
 resource "aws_security_group" "ecsdemo_ecs" {
   name   = local.ecs_security_group
-  vpc_id = "vpc-0459ebf35d23402f5"
+  vpc_id = var.vpc_id
 }
 
 resource "aws_security_group" "ecsdemo_elb" {
   name   = local.elb_security_group
-  vpc_id = "vpc-0459ebf35d23402f5"
+  vpc_id = var.vpc_id
 }
 
 resource "aws_vpc_security_group_ingress_rule" "ecsdemo-to-elb" {
@@ -115,7 +115,7 @@ resource "aws_lb_target_group" "ecsdemo" {
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = "vpc-0459ebf35d23402f5"
+  vpc_id      = var.vpc_id
   health_check {
     path     = "/actuator/health"
     port     = "8080"
@@ -127,7 +127,7 @@ resource "aws_lb" "ecsdemo" {
   name               = local.resource_full_name
   load_balancer_type = "application"
   security_groups    = [aws_security_group.ecsdemo_elb.id]
-  subnets            = ["subnet-0ca86d728a0a1fa7b", "subnet-029b16c69a7bdada1", "subnet-0e8bef5b4cbe0acca", "subnet-06a67c73f3f4260d5"]
+  subnets            = data.aws_subnets.ecsdemo.ids
   access_logs {
     bucket = aws_s3_bucket.access_logs.id
   }
@@ -151,7 +151,7 @@ resource "aws_ecs_service" "ecsdemo" {
   desired_count   = 1
   launch_type     = "FARGATE"
   network_configuration {
-    subnets          = ["subnet-0ca86d728a0a1fa7b", "subnet-029b16c69a7bdada1", "subnet-0e8bef5b4cbe0acca", "subnet-06a67c73f3f4260d5"]
+    subnets          = data.aws_subnets.ecsdemo.ids
     security_groups  = [aws_security_group.ecsdemo_ecs.id]
     assign_public_ip = true
   }
