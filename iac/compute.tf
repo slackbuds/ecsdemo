@@ -43,10 +43,16 @@ resource "aws_ecs_task_definition" "ecsdemo" {
         hostPort      = 8080
         protocol      = "tcp"
       }]
-      environment = [{
-        foo       = "bar",
-        JAVA_OPTS = "-Dspring.profiles.active=deploy"
-      }]
+      environment = [
+        {
+          "name" : "foo",
+          "value" : "bar"
+        },
+        {
+          "name" : "JAVA_OPTS",
+          "value" : "-Dspring.profiles.active=deploy"
+        }
+      ]
       secrets = [
         {
           "name" : "secret",
