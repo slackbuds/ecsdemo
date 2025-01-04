@@ -3,9 +3,9 @@
 
 resource "aws_ecr_repository" "ecsdemo" {
   name                 = local.resource_full_name
-  image_tag_mutability = var.ecr_image_immutability
+  image_tag_mutability = "IMMUTABLE"
   encryption_configuration {
-    encryption_type = var.ecr_encryption_type
+    encryption_type = "KMS"
   }
   image_scanning_configuration {
     scan_on_push = true

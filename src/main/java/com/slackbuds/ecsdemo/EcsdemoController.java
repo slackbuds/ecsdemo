@@ -16,7 +16,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 @Log4j2
 @RestController
-@RequestMapping("/ecsdemo")
+@RequestMapping("/api/v1")
 public class EcsdemoController {
 
   private final StartupEnv startupEnv;
@@ -84,7 +84,7 @@ public class EcsdemoController {
         HttpStatus.OK);
   }
 
-  @GetMapping("/aws/tables")
+  @GetMapping("/tables")
   ResponseEntity<List<String>> listTables() {
     log.debug("list dynamodb tables");
 

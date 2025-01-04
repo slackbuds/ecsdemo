@@ -5,34 +5,34 @@ GET {{host}}/actuator
 GET {{host}}/actuator/health
 
 ### GET hello world
-GET {{host}}/ecsdemo/hello
+GET {{host}}/api/v1/hello
 
 ### GET hello bad
-GET {{host}}/ecsdemo/hello?name=bad
+GET {{host}}/api/v1/hello?name=bad
 
 ### GET env as plain
-GET {{host}}/ecsdemo/env
+GET {{host}}/api/v1/env
 
 ### GET env HOME as plain
-GET {{host}}/ecsdemo/env?key=HOME
+GET {{host}}/api/v1/env?key=HOME
 
 ### GET env as json
-GET {{host}}/ecsdemo/env
+GET {{host}}/api/v1/env
 Accept: application/json
 
 ### GET env HOME as json
-GET {{host}}/ecsdemo/env?key=HOME
+GET {{host}}/api/v1/env?key=HOME
 Accept: application/json
 
 ### POST echo json
-POST {{host}}/ecsdemo/echo
+POST {{host}}/api/v1/echo
 Content-Type: application/json
 foo: Bar
 
 {"id":42,"foo":"bar"}
 
 ### POST echo csv
-POST {{host}}/ecsdemo/echo
+POST {{host}}/api/v1/echo
 Accept: application/json
 Content-Type: application/csv
 fein: fein
@@ -40,5 +40,5 @@ fein: fein
 fein,fein,fein,fein
 
 ### GET dynamodb tables
-GET {{host}}/ecsdemo/aws/tables
+GET {{host}}/api/v1/tables
 Accept: application/json

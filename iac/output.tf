@@ -17,3 +17,11 @@ output "ecs_service" {
 output "alb" {
   value = aws_lb.ecsdemo.dns_name
 }
+
+output "route53_zone" {
+  value = data.aws_route53_zone.ecsdemo.zone_id
+}
+
+output "route53_record" {
+  value = aws_route53_record.ecsdemo.id
+}
