@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "ecs_assume_role" {
   }
 }
 
-resource "aws_iam_role" "ecs_demo_task_execution" {
+resource "aws_iam_role" "ecsdemo_task_execution" {
   name               = local.ecs_task_execution_role
   assume_role_policy = data.aws_iam_policy_document.ecs_assume_role.json
 }
@@ -19,11 +19,11 @@ data "aws_iam_policy" "ecsdemo_task_execution_ecs" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecsdemo_task_execution_ecs" {
-  role       = aws_iam_role.ecs_demo_task_execution.name
+  role       = aws_iam_role.ecsdemo_task_execution.name
   policy_arn = data.aws_iam_policy.ecsdemo_task_execution_ecs.arn
 }
 
-data "aws_iam_policy_document" "ecsdemo_policy_task_execution" {
+data "aws_iam_policy_document" "ecsdemo_task_execution" {
   statement {
     effect = "Allow"
     actions = [
@@ -46,20 +46,20 @@ data "aws_iam_policy_document" "ecsdemo_policy_task_execution" {
 
 resource "aws_iam_policy" "ecsdemo_task_execution" {
   name   = local.ecs_task_execution_role
-  policy = data.aws_iam_policy_document.ecsdemo_policy_task_execution.json
+  policy = data.aws_iam_policy_document.ecsdemo_task_execution.json
 }
 
 resource "aws_iam_role_policy_attachment" "ecsdemo_task_execution" {
-  role       = aws_iam_role.ecs_demo_task_execution.name
+  role       = aws_iam_role.ecsdemo_task_execution.name
   policy_arn = aws_iam_policy.ecsdemo_task_execution.arn
 }
 
-resource "aws_iam_role" "ecs_demo_execution" {
+resource "aws_iam_role" "ecsdemo_execution" {
   name               = local.ecs_execution_role
   assume_role_policy = data.aws_iam_policy_document.ecs_assume_role.json
 }
 
-data "aws_iam_policy_document" "ecsdemo_policy_execution" {
+data "aws_iam_policy_document" "ecsdemo_execution" {
   statement {
     effect = "Allow"
     actions = [
@@ -73,10 +73,10 @@ data "aws_iam_policy_document" "ecsdemo_policy_execution" {
 
 resource "aws_iam_policy" "ecsdemo_execution_ecs" {
   name   = local.ecs_execution_role
-  policy = data.aws_iam_policy_document.ecsdemo_policy_execution.json
+  policy = data.aws_iam_policy_document.ecsdemo_execution.json
 }
 
 resource "aws_iam_role_policy_attachment" "ecsdemo_execution" {
-  role       = aws_iam_role.ecs_demo_execution.name
+  role       = aws_iam_role.ecsdemo_execution.name
   policy_arn = aws_iam_policy.ecsdemo_execution_ecs.arn
 }

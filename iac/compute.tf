@@ -11,7 +11,6 @@ resource "aws_ecr_repository" "ecsdemo" {
     scan_on_push = true
   }
   force_delete = true
-  tags         = local.tags
 }
 
 resource "aws_ecs_cluster" "ecsdemo" {
@@ -24,8 +23,8 @@ resource "aws_ecs_cluster" "ecsdemo" {
 
 resource "aws_ecs_task_definition" "ecsdemo" {
   family                   = "ecsdemo-family"
-  task_role_arn            = aws_iam_role.ecs_demo_execution.arn
-  execution_role_arn       = aws_iam_role.ecs_demo_task_execution.arn
+  task_role_arn            = aws_iam_role.ecsdemo_execution.arn
+  execution_role_arn       = aws_iam_role.ecsdemo_task_execution.arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
@@ -92,25 +91,25 @@ resource "aws_security_group" "ecsdemo_elb" {
   vpc_id = var.vpc_id
 }
 
-resource "aws_vpc_security_group_ingress_rule" "ecsdemo-to-elb" {
+resource "aws_vpc_security_group_ingress_rule" "ecsdemo_elb" {
   security_group_id = aws_security_group.ecsdemo_elb.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = -1
 }
 
-resource "aws_vpc_security_group_egress_rule" "ecsdemo-to-elb" {
+resource "aws_vpc_security_group_egress_rule" "ecsdemo_elb" {
   security_group_id = aws_security_group.ecsdemo_elb.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = -1
 }
 
-resource "aws_vpc_security_group_ingress_rule" "ecsdemo-elb-to-ecs" {
+resource "aws_vpc_security_group_ingress_rule" "ecsdemo_ecs_from_elb" {
   security_group_id            = aws_security_group.ecsdemo_ecs.id
   referenced_security_group_id = aws_security_group.ecsdemo_elb.id
   ip_protocol                  = -1
 }
 
-resource "aws_vpc_security_group_egress_rule" "ecsdemo-ecs-egress" {
+resource "aws_vpc_security_group_egress_rule" "ecsdemo_ecs" {
   security_group_id = aws_security_group.ecsdemo_ecs.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = -1
@@ -133,11 +132,10 @@ resource "aws_lb" "ecsdemo" {
   name               = local.resource_full_name
   load_balancer_type = "application"
   security_groups    = [aws_security_group.ecsdemo_elb.id]
-  subnets            = data.aws_subnets.ecsdemo.ids
+  subnets            = data.aws_subnets.current.ids
   access_logs {
     bucket = aws_s3_bucket.access_logs.id
   }
-  tags = local.tags
 }
 
 resource "aws_lb_listener" "ecsdemo_http" {
@@ -173,7 +171,7 @@ resource "aws_ecs_service" "ecsdemo" {
   desired_count   = 1
   launch_type     = "FARGATE"
   network_configuration {
-    subnets          = data.aws_subnets.ecsdemo.ids
+    subnets          = data.aws_subnets.current.ids
     security_groups  = [aws_security_group.ecsdemo_ecs.id]
     assign_public_ip = true
   }

@@ -19,7 +19,7 @@ output "alb" {
 }
 
 output "route53_zone" {
-  value = data.aws_route53_zone.ecsdemo.zone_id
+  value = data.aws_route53_zone.current.zone_id
 }
 
 output "route53_record" {
