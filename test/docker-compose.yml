@@ -1,0 +1,9 @@
+services:
+  test:
+    build:
+      context: .
+    container_name: ecsdemo
+    platform: linux/amd64
+    environment:
+      HOST: http://host.docker.internal:8080
+      #HOST: https://ecsdemo.slackbuds.io

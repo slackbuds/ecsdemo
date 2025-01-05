@@ -45,3 +45,11 @@ aws ecr get-login-password --region us-west-2 | docker login --username AWS --pa
 docker tag ecsdemo-app:latest 714681258665.dkr.ecr.us-west-2.amazonaws.com/ecsdemo-dev:latest
 docker push 714681258665.dkr.ecr.us-west-2.amazonaws.com/ecsdemo-dev:latest
 ```
+
+### Endpoints
+
+* https://ecsdemo.slackbuds.io/actuator
+* https://ecsdemo.slackbuds.io/api/v1/hello
+* https://ecsdemo.slackbuds.io/api/v1/env
+* https://ecsdemo.slackbuds.io/api/v1/echo
+* https://ecsdemo.slackbuds.io/api/v1/tables
