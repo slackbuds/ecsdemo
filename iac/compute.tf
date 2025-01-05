@@ -56,7 +56,7 @@ resource "aws_ecs_task_definition" "ecsdemo" {
       secrets = [
         {
           "name" : "secret",
-          "valueFrom" : "arn:aws:secretsmanager:us-west-2:714681258665:secret:dev/ecsdemo/mysecret-17ivBh"
+          "valueFrom" : var.secret_arn
         }
       ]
       logConfiguration : {
