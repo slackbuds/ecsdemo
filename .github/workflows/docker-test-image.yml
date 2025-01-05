@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker Test Image CI
 on:
   push:
     branches: [ "master" ]
