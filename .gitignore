@@ -39,3 +39,4 @@ terraform.tfstate
 terraform.tfstate.backup
 
 t.*
+secrets.*
