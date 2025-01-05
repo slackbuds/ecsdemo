@@ -8,3 +8,7 @@ data "aws_subnets" "ecsdemo" {
     values = [var.vpc_id]
   }
 }
+
+data "aws_route53_zone" "ecsdemo" {
+  name = "slackbuds.io."
+}
