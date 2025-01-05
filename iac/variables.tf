@@ -6,6 +6,10 @@ variable "region" {
   type = string
 }
 
+variable "certificate_arn" {
+  type = string
+}
+
 variable "env" {
   type = string
 }
